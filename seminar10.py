@@ -1,3 +1,4 @@
+import random 
 #
 # 1.Создать класс, описывающий человека.
 # Должны быть поля для имени, фамилии и возраста.
@@ -40,45 +41,68 @@ person = Human('Ivanov', 'Ivan', 35)
 # и вывести информацию о них в порядке убывания среднего балла.
 # Заполнение оценок и подсчёт среднего балла вынести в отдельные методы.
 #
-from random import randint
+
+
+
+class Grade:
+
+    def __init__(self) -> None:
+        self.grades = list()
+
+    def get_random_grades(self, number_grades: int) -> list:
+        self.grades = [random.randint(2, 5) for _ in range(number_grades)]
+        return self.grades
+
+    def get_grade(self, grade: int) -> list:
+        self.grades.append(grade)
+        return self.grades
+
+    def get_all_grades(self) -> list:
+        return self.grades
 
 
 class Student(Human):
-    # def __init__(self, name: str, last_name: str) ->None:
-    #     self.name = name
-    #     self.last_name = last_name
-    #     self.grades = grades
-    def __repr__(self):
-        return self.name
-
-
-    def set_grades(self, grades):
+    def __init__(self, name: str, last_name: str, age: int, grades: Grade) -> None:
+        super().__init__(name, last_name, age)
         self.grades = grades
+        self.grades_set = []
+
+    def __repr__(self):
+        return self.last_name
+
+    def average_grades(self) -> float:
+        return sum(self.grades.get_all_grades())/len(self.grades.get_all_grades())
+
+    def set_grades(self, number_grades):
+        self.grades_set = self.grades.get_random_grades(number_grades)
+        return self.grades_set
 
     def get_grades(self):
-        return self.grades
-
-    def get_average(self):
-        return sum(self.grades) / len(self.grades)
+        return self.grades_set
 
 
-pupil1 = Student('Ivanov', 'Ivan', 20)
-pupil2 = Student('Petrov', 'Petr', 21)
-pupil3 = Student('Ivanova', 'Anna', 18)
+def main():
+    points = Grade()
 
-students = [pupil1, pupil2, pupil3]
+    student1 = Student("Ivan", 'Ivanov', 23, points)
+    student2 = Student("Petr", 'Petrov', 20, points)
+    student3 = Student("Grischa", 'Smirnov', 18, points)
+
+    student1.set_grades(5)
+    student2.set_grades(6)
+    student3.set_grades(4)
+
+    student1.average_grades()
+    student2.average_grades()
+    student3.average_grades()
+
+    students = [student1, student2, student3]
+
+    print(sorted(students, key=lambda x: x.get_grades()[1]))
 
 
-def set_points():
-    points = [randint(2, 5) for i in range(5)]
-    return points
+main()
 
-
-for student in students:
-    student.set_grades(set_points())
-
-students.sort(key=lambda x: x.get_average())
-print(students)
 # print(sorted(students, key=lambda x: x.get_average()))
 
 # 5. Создайте класс прямоугольник — Rectangle. Метод __init__
